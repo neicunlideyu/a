@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/aop"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:beans="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+  <config>
+    <pointcut id="createPullRequest"
+                  expression="execution(* com.onboard.plugin.git.*.createPullRequest*(..)) and args(item)"/>
+    <pointcut id="createPush"
+                  expression="execution(* com.onboard.plugin.git.*.createPush*(..)) and args(item)"/>
+    <pointcut id="createReview"
+                  expression="execution(* com.onboard.plugin.git.*.createReview*(..)) and args(item)"/>
+    <pointcut id="updatePullRequest"
+                  expression="execution(* com.onboard.plugin.git.*.updatePullRequest*(com.onboard.domain..*.Identifiable+))" />
+    <aspect ref="activityRecorder">
+      <after pointcut-ref="createPullRequest" method="recordCreationActivity" arg-names="item"/>
+      <after pointcut-ref="createPush" method="recordCreationActivity" arg-names="item"/>
+      <after pointcut-ref="createReview" method="recordCreationActivity" arg-names="item"/>
+      <around pointcut-ref="updatePullRequest" method="recordUpdateActivity" />
+    </aspect>
+  </config>
+
+</beans:beans>

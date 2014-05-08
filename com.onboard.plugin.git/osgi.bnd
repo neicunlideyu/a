@@ -1,0 +1,13 @@
+Private-Package: com.onboard.plugin.git.impl;version=${project.version},\
+ com.onboard.plugin.git.utils;version=${project.version},\
+ com.onboard.plugin.git.activity;version=${project.version},\
+ com.onboard.plugin.git.hook;version=${project.version},\
+ com.onboard.plugin.git.notification;version=${project.version}
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Export-Package: com.onboard.plugin.git;version=${project.version},\
+ com.onboard.plugin.git.model;version=${project.version},\
+ com.onboard.plugin.git.mapper;version=${project.version}
+Import-Bundle: org.springframework.aop;version=3.1,\
+ com.springsource.org.aopalliance,\
+ com.springsource.com.mysql.jdbc
+

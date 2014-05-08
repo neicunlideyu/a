@@ -1,0 +1,31 @@
+<table id="teamforge_email" style="background:#ffffff;margin:0;padding:0;border:0;width:100%;text-align:left;border-collapse:collapse;border-spacing:0" id="msg">
+    <tbody>
+        <tr>
+            <td> 
+                <p style="font-size:16px;line-height:40px;font-family:'Helvetica Neue',helvetica,sans-serif;color:#822e14">
+                    ${userName}在${repo.name}中${operation}pull-request ${pullRequest.title} ：
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td> 
+                <p style="margin:19px 0;padding:15px 0;border-top:1px solid #ccc;background:#ffffff;width:100%">
+                    从分支 ${pullRequest.source} 到分支 ${pullRequest.destination}
+                </p>
+                <p style="margin:19px 0;padding:15px 0;border-top:1px solid #ccc;background:#ffffff;width:100%">
+                    commit信息：
+                </p>
+                <p style="margin:19px 0;padding:15px 0;border-bottom:1px solid #ccc;background:#ffffff;width:100%">
+                    ${pullRequest.description}
+                </p>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <p style="line-height:19px;font-size:14px;margin:19px 0 9px;font-family:&quot;Helvetica Neue&quot;,helvetica,arial,sans-serif">
+                    <a href="http://${host}/${url}" target="_blank"> 在onboard上查看该信息</a>
+                </p>
+            </td>
+        </tr>
+    </tbody>
+</table>

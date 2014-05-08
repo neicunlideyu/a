@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+                           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+  <!-- 支持Bean的自动装配 -->
+  <context:component-scan base-package="com.onboard.plugin.git"/>
+  <context:property-placeholder location="/META-INF/jdbc.properties, /META-INF/plugin.git.properties" />
+
+  <!-- enable transaction declaration with annotations -->
+  <tx:annotation-driven transaction-manager="transactionManager"/>
+
+  <!-- Mapper -->
+  <bean id="repositoryMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.RepositoryMapper"/>
+    <property name="sqlSessionFactory" ref="sqlSessionFactory"/>
+  </bean>
+  <bean id="pullRequestMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.PullRequestMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+  
+  <bean id="pullRequestReviewerMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.PullRequestReviewerMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+  
+  <bean id="reviewMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.ReviewMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+  
+  <bean id="pullRequestActivityMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.PullRequestActivityMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+  
+  <bean id="repositoryPrivilegeMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.RepositoryPrivilegeMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+  
+  <bean id="repositoryPrivilegeUserMapper" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.RepositoryPrivilegeUserMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+
+  <bean id="repositoryBranchPrivilegeMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.RepositoryBranchPrivilegeMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+
+  <bean id="pushMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.PushMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+
+  <bean id="pullRequestPushMapperBean" class="org.mybatis.spring.mapper.MapperFactoryBean">
+    <property name="mapperInterface" value="com.onboard.plugin.git.mapper.PullRequestPushMapper" />
+    <property name="sqlSessionFactory" ref="sqlSessionFactory" />
+  </bean> 
+
+  <!-- propertyConfigurer and velocityEngine for emailnotification -->
+  <bean id="propertyConfigurer"
+    class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <property name="locations">
+      <list>
+        <value>classpath*:/META-INF/*.properties</value>
+      </list>
+    </property>    
+  </bean>
+  <bean id="velocityEngine"
+        class="org.springframework.ui.velocity.VelocityEngineFactoryBean">
+    <property name="velocityProperties">
+      <value>
+        resource.loader=class
+        class.resource.loader.class=org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader
+        input.encoding=UTF-8
+      </value>
+    </property>
+  </bean>
+</beans>
+

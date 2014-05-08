@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans:beans xmlns="http://www.springframework.org/schema/osgi" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:beans="http://www.springframework.org/schema/beans"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                                 http://www.springframework.org/schema/osgi http://www.springframework.org/schema/osgi/spring-osgi.xsd">
+
+  <!-- 事务服务的引用 -->
+  <reference id="transactionManager" interface="org.springframework.transaction.PlatformTransactionManager" />
+
+  <!-- 连接池的引用 -->
+  <reference id="sqlSessionFactory" interface="org.apache.ibatis.session.SqlSessionFactory" />
+
+  <!-- 引入 activityRecorder -->
+  <reference id="activityRecorder" interface="com.onboard.service.activity.ActivityRecorder" />
+
+  <!-- 引入 indexWriterAspect -->
+  <reference id="indexWriterAspect" interface="com.onboard.service.index.IndexWriterAspect" />
+
+  <!-- Service层依赖 -->
+  <reference id="sessionService" interface="com.onboard.service.web.SessionService" />
+  <reference id="userService" interface="com.onboard.service.account.UserService" />
+  <reference id="commentService" interface="com.onboard.service.collaboration.CommentService" />
+  <reference id="subscriberService" interface="com.onboard.service.collaboration.SubscriberService" />
+  <reference id="projectService" interface="com.onboard.service.collaboration.ProjectService" />
+  <reference id="emailService" interface="com.onboard.service.email.EmailService" />
+  <reference id="roleService" interface="com.onboard.service.security.RoleService" />
+  <reference id="identifiableManager" interface="com.onboard.service.collaboration.identifiable.IdentifiableManager" />
+  <reference id="activityService" interface="com.onboard.service.activity.ActivityService" />
+
+  <!-- 开放的服务 -->
+  <service id="repositoryService" interface="com.onboard.plugin.git.RepositoryService" ref="repositoryServiceBean" />
+  <service id="pullRequestActivityService" interface="com.onboard.plugin.git.PullRequestActivityService" ref="pullRequestActivityServiceBean" />
+  <service id="pullRequestReviewerService" interface="com.onboard.plugin.git.PullRequestReviewerService" ref="pullRequestReviewerServiceBean" />
+  <service id="pullRequestService"
+           interface="com.onboard.plugin.git.PullRequestService, com.onboard.service.collaboration.identifiable.IdentifiableService"
+           ref="pullRequestServiceBean" />
+  <service id="reviewService" interface="com.onboard.plugin.git.ReviewService, com.onboard.service.collaboration.identifiable.IdentifiableService" ref="reviewServiceBean" />
+  <service id="repositoryBranchPrivilegeService" interface="com.onboard.plugin.git.RepositoryBranchPrivilegeService"
+    ref="repositoryBranchPrivilegeServiceBean" />
+  <service id="repositoryPrivilegeService" interface="com.onboard.plugin.git.RepositoryPrivilegeService" ref="repositoryPrivilegeServiceBean" />
+  <service id="repositoryPrivilegeUserService" interface="com.onboard.plugin.git.RepositoryPrivilegeUserService"
+    ref="repositoryPrivilegeUserServiceBean" />
+  <service id="postReceiveHook" interface="com.onboard.plugin.git.GitPostReceiveHook" ref="gitPostReceiveHookBean" />
+  <service id="preReceiveHook" interface="com.onboard.plugin.git.GitPreReceiveHook" ref="gitPreReceiveHookBean" />
+  <service id="preUploadPreHook" interface="com.onboard.plugin.git.GitPreUploadPreHook" ref="gitPreUploadPreHookBean" />
+  <service id="pushService" interface="com.onboard.plugin.git.PushService, com.onboard.service.collaboration.identifiable.IdentifiableService" ref="pushServiceBean" />
+  <service id="pullRequestPushService" interface="com.onboard.plugin.git.PullRequestPushService" ref="pullRequestPushServiceBean" />
+
+  <!-- ActivityGenerator服务 -->
+  <service id="pullRequestActivityGenerator" interface="com.onboard.service.activity.ActivityGenerator" ref="pullRequestActivityGeneratorBean" />
+  <service id="pushActivityGenerator" interface="com.onboard.service.activity.ActivityGenerator" ref="pushActivityGeneratorBean" />
+  <service id="reviewActivityGenerator" interface="com.onboard.service.activity.ActivityGenerator" ref="reviewActivityGeneratorBean" />
+
+  <!-- NotificationMethod服务 -->
+  <service id="createPullRequestNotificationRule" interface=" com.onboard.service.notification.NotificationRule"
+    ref="createPullRequestNotificationRuleBean" />
+  <service id="createPullRequestEmailNotification" interface=" com.onboard.service.notification.NotificationMethod"
+    ref="createPullRequestEmailNotificationBean" />
+  <service id="mergePullRequestNotificationRule" interface=" com.onboard.service.notification.NotificationRule"
+    ref="mergePullRequestNotificationRuleBean" />
+  <service id="mergePullRequestEmailNotification" interface=" com.onboard.service.notification.NotificationMethod"
+    ref="mergePullRequestEmailNotificationBean" />
+  <service id="declinePullRequestNotificationRule" interface=" com.onboard.service.notification.NotificationRule"
+    ref="declinePullRequestNotificationRuleBean" />
+  <service id="declinePullRequestEmailNotification" interface=" com.onboard.service.notification.NotificationMethod"
+    ref="declinePullRequestEmailNotificationBean" />
+  <service id="reopenPullRequestNotificationRule" interface=" com.onboard.service.notification.NotificationRule"
+    ref="reopenPullRequestNotificationRuleBean" />
+  <service id="reopenPullRequestEmailNotification" interface=" com.onboard.service.notification.NotificationMethod"
+    ref="reopenPullRequestEmailNotificationBean" />
+
+  <!-- SearchItemBuilder服务 -->
+
+  <!-- IndexableService服务 -->
+  
+  <!-- 对OnboardHook的监听 -->
+  <list id="onBoardPostReceiveHook" cardinality="0..N" interface="com.onboard.plugin.git.OnBoardPostReceiveHook">
+    <listener bind-method="addOnBoardPostReceiveHook" unbind-method="removeOnBoardPostReceiveHook" ref="gitPostReceiveHookBean" />
+  </list>
+  <list id="onBoardPreReceiveHook" cardinality="0..N" interface="com.onboard.plugin.git.OnBoardPreReceiveHook">
+    <listener bind-method="addOnBoardPreReceiveHook" unbind-method="removeOnBoardPreReceiveHook" ref="gitPreReceiveHookBean" />
+  </list>
+  <list id="onBoardPreUploadHook" cardinality="0..N" interface="com.onboard.plugin.git.OnBoardPreUploadHook">
+    <listener bind-method="addOnBoardPreUploadHook" unbind-method="removeOnBoardPreUploadHook" ref="gitPreUploadPreHookBean" />
+  </list>
+  <service id="branchWritePreHook" interface="com.onboard.plugin.git.OnBoardPreReceiveHook" ref="branchWritePreHookBean" />
+  <service id="gitWritePreHook" interface="com.onboard.plugin.git.OnBoardPreReceiveHook" ref="gitWritePreHookBean" />
+  <service id="projectNotArchivedPreHook" interface="com.onboard.plugin.git.OnBoardPreReceiveHook" ref="projectNotArchivedPreHookBean" />
+  <service id="updatePullRequestPostHook" interface="com.onboard.plugin.git.OnBoardPostReceiveHook" ref="updatePullRequestPostHookBean" />
+  <service id="updateRepositoryPostHook" interface="com.onboard.plugin.git.OnBoardPostReceiveHook" ref="updateRepositoryPostHookBean" />
+  <service id="gitReadPreHook" interface="com.onboard.plugin.git.OnBoardPreUploadHook" ref="gitReadPreHookBean" />
+  <service id="createPushPostReceiveHook" interface="com.onboard.plugin.git.OnBoardPostReceiveHook" ref="createPushPostReceiveHookBean" />
+
+</beans:beans>
